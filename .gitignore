@@ -1,5 +1,6 @@
-.*
+.gitignore
 build
 *.key
 *.hprof
 /App/App-1.0.0-full.jar
+/App/src/main/resources/google-credentials.json

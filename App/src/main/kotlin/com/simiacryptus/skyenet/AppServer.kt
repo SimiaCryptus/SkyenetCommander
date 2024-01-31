@@ -2,6 +2,7 @@ package com.simiacryptus.skyenet
 
 import com.simiacryptus.skyenet.apps.coding.AwsCodingApp
 import com.simiacryptus.skyenet.apps.coding.BashCodingApp
+import com.simiacryptus.skyenet.apps.coding.GmailCodingApp
 import com.simiacryptus.skyenet.webui.application.ApplicationDirectory
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
 import software.amazon.awssdk.regions.Region
@@ -25,7 +26,8 @@ open class AppServer(
   //    private val sparkConf = SparkConf().setMaster("local[*]").setAppName("Spark Coding Assistant")
   override val childWebApps by lazy {
     listOf(
-      ChildWebApp("/aws_coder", AwsCodingApp()),
+      ChildWebApp("/aws", AwsCodingApp()),
+      ChildWebApp("/gmail", GmailCodingApp()),
       ChildWebApp("/bash", BashCodingApp()),
     )
   }
