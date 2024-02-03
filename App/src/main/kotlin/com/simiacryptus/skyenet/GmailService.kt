@@ -1,16 +1,18 @@
 package com.simiacryptus.skyenet
 
+import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
+import com.google.api.client.googleapis.apache.v2.GoogleApacheHttpTransport
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.http.HttpTransport
 import com.google.api.client.json.JsonFactory
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.gmail.Gmail
 import com.google.api.services.gmail.GmailScopes
+import com.simiacryptus.skyenet.core.platform.ApplicationServices
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -21,17 +23,17 @@ open class GmailService(
   val applicationName: String = "Gmail API Java Quickstart",
   val jsonFactory: JsonFactory = GsonFactory.getDefaultInstance(),
   val tokensDir: String = "tokens",
-  val credentialsResourcePath: String = "/google-credentials.json",
+  val credentialsResourcePath: String = "/google-credentials.json.kms",
   val scopes: List<String> = listOf(
     GmailScopes.GMAIL_LABELS,
     GmailScopes.GMAIL_READONLY,
     GmailScopes.MAIL_GOOGLE_COM,
   ),
 ) {
-  open val transport by lazy { GoogleNetHttpTransport.newTrustedTransport() }
+  open val transport by lazy { GoogleApacheHttpTransport.newTrustedTransport() }
 
   @Throws(IOException::class)
-  open fun getCredentials(transport: NetHttpTransport) =
+  open fun getCredentials(transport: HttpTransport): Credential =
     AuthorizationCodeInstalledApp(
       GoogleAuthorizationCodeFlow.Builder(
         transport,
@@ -46,10 +48,14 @@ open class GmailService(
         .build(), LocalServerReceiver.Builder().setPort(8888).build()
     ).authorize("user")
 
-  open fun getCredentialsJsonStream() = InputStreamReader(
-    GmailService::class.java.getResourceAsStream(credentialsResourcePath)
-      ?: throw FileNotFoundException("Resource not found: $credentialsResourcePath")
-  )
+  open fun getCredentialsJsonStream(): InputStreamReader {
+    var inputStream = (GmailService::class.java.getResourceAsStream(credentialsResourcePath)
+      ?: throw FileNotFoundException("Resource not found: $credentialsResourcePath"))
+    if(credentialsResourcePath.endsWith(".kms")) {
+      inputStream = ApplicationServices.cloud!!.decrypt(inputStream.readAllBytes()).byteInputStream()
+    }
+    return InputStreamReader(inputStream)
+  }
 
   open fun getGmailService() = Gmail
     .Builder(transport, jsonFactory, getCredentials(transport))

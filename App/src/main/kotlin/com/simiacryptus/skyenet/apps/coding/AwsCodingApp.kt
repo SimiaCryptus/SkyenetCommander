@@ -8,10 +8,10 @@ import com.simiacryptus.skyenet.kotlin.KotlinInterpreter
 import com.simiacryptus.skyenet.webui.application.ApplicationInterface
 import com.simiacryptus.skyenet.webui.application.ApplicationServer
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain
-import java.io.File
 
 class AwsCodingApp : ApplicationServer(
   applicationName = "AWS Coding Assistant v1.0",
+  path = "/aws",
 ) {
   override fun userMessage(
     session: Session,

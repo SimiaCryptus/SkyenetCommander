@@ -16,7 +16,9 @@ import java.io.File
 
 class BashCodingApp(
 ) : ApplicationServer(
-  "Bash Coding Assistant v1.0") {
+  applicationName = "Bash Coding Assistant v1.0",
+  path = "/bash",
+) {
 
   data class Settings(
     val env: Map<String, String> = mapOf(),
@@ -26,8 +28,10 @@ class BashCodingApp(
     val language: String = "bash",
     val command: List<String> = listOf("bash"),
   )
+
   override val settingsClass: Class<*> get() = Settings::class.java
-  @Suppress("UNCHECKED_CAST") override fun <T:Any> initSettings(session: Session): T? = Settings() as T
+  @Suppress("UNCHECKED_CAST")
+  override fun <T : Any> initSettings(session: Session): T? = Settings() as T
 
   override fun userMessage(
     session: Session,
@@ -44,7 +48,7 @@ class BashCodingApp(
       user = user,
       ui = ui,
       interpreter = ProcessInterpreter::class,
-      symbols =   mapOf(
+      symbols = mapOf(
         "env" to (settings?.env ?: mapOf()),
         "workingDir" to File(settings?.workingDir ?: ".").absolutePath,
         "language" to (settings?.language ?: "bash"),
@@ -123,7 +127,8 @@ class BashCodingApp(
             task.error(e)
           }
         }
-        formHandle = task.add("""
+        formHandle = task.add(
+          """
           |<div class='code-execution'>
           |    ${if (super.canPlay) super.ui.hrefLink("▶", "href-link play-button", playHandler) else ""}
           |    ${super.ui.textInput(feedbackHandler)}

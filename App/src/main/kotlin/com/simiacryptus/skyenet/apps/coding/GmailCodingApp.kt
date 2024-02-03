@@ -13,6 +13,7 @@ import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain
 
 class GmailCodingApp : ApplicationServer(
   applicationName = "GMail Coding Assistant v1.0",
+  path = "/gmail",
 ) {
   override fun userMessage(
     session: Session,
