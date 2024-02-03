@@ -10,6 +10,7 @@ import com.simiacryptus.skyenet.kotlin.KotlinInterpreter
 import com.simiacryptus.skyenet.webui.application.ApplicationInterface
 import com.simiacryptus.skyenet.webui.application.ApplicationServer
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain
+import java.util.function.Supplier
 
 class GmailCodingApp : ApplicationServer(
   applicationName = "GMail Coding Assistant v1.0",
@@ -24,13 +25,8 @@ class GmailCodingApp : ApplicationServer(
   ) {
     val settings = getSettings<Settings>(session, user)
     val gmailSvc: Gmail = GmailService.getGmailService()
-    val userSvc: Gmail.Users = gmailSvc.users()
     val symbols = mapOf(
-      "gmail" to gmailSvc,
-      "gmailUser" to "me",
-      "gmailUsers" to userSvc,
-      "gmailMessages" to userSvc.messages(),
-      "gmailLabels" to userSvc.labels(),
+      "gmail" to GmailSupplier(gmailSvc),
     )
     CodingAgent(
       api = api,
@@ -45,6 +41,12 @@ class GmailCodingApp : ApplicationServer(
     ).start(
       userMessage = userMessage,
     )
+  }
+
+  class GmailSupplier(private val gmailSvc: Gmail) : Supplier<Gmail> {
+    override fun get(): Gmail {
+      return gmailSvc
+    }
   }
 
   data class Settings(

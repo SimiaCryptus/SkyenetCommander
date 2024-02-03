@@ -54,6 +54,7 @@ dependencies {
   implementation("com.google.api-client:google-api-client:1.35.2")
   implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
   implementation("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
 
   implementation("org.seleniumhq.selenium:selenium-chrome-driver:4.16.1")

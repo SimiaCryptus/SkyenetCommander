@@ -107,7 +107,7 @@ class BashCodingApp(
                     message to ApiModel.Role.system,
                   ).filter { it.first.isNotBlank() }
             )
-            super.displayCode(task, codeRequest, actor.answer(codeRequest, api = api))
+            super.displayCode(task, codeRequest)
           }
         }
         val feedbackHandler: (t: String) -> Unit = { feedback ->
@@ -121,7 +121,7 @@ class BashCodingApp(
                     feedback to ApiModel.Role.user,
                   ).filter { it.first?.isNotBlank() == true }.map { it.first!! to it.second }
             )
-            super.displayCode(task, codeRequest, actor.answer(codeRequest, api = api))
+            super.displayCode(task, codeRequest)
           } catch (e: Throwable) {
             log.warn("Error", e)
             task.error(e)
