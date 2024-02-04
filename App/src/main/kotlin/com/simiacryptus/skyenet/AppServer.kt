@@ -3,6 +3,7 @@ package com.simiacryptus.skyenet
 import com.simiacryptus.skyenet.apps.coding.AwsCodingApp
 import com.simiacryptus.skyenet.apps.coding.BashCodingApp
 import com.simiacryptus.skyenet.apps.coding.GmailCodingApp
+import com.simiacryptus.skyenet.apps.coding.PowershellCodingApp
 import com.simiacryptus.skyenet.webui.application.ApplicationDirectory
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
 import software.amazon.awssdk.regions.Region
@@ -29,6 +30,7 @@ open class AppServer(
       ChildWebApp("/aws", AwsCodingApp()),
       ChildWebApp("/gmail", GmailCodingApp()),
       ChildWebApp("/bash", BashCodingApp()),
+      ChildWebApp("/powershell", PowershellCodingApp()),
     )
   }
 
