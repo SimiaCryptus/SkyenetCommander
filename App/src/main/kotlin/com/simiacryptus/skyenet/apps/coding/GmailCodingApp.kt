@@ -28,7 +28,7 @@ class GmailCodingApp : ApplicationServer(
     val symbols = mapOf(
       "gmail" to GmailSupplier(gmailSvc),
     )
-    CodingAgent(
+    ToolAgent(
       api = api,
       dataStorage = dataStorage,
       session = session,
@@ -61,3 +61,4 @@ class GmailCodingApp : ApplicationServer(
   override fun <T : Any> initSettings(session: Session): T? = Settings() as T
 
 }
+

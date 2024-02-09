@@ -43,7 +43,7 @@ val jupiter_version = "5.10.1"
 dependencies {
   implementation("org.postgresql:postgresql:42.7.1")
 
-  implementation(group = "com.simiacryptus", name = "jo-penai", version = "1.0.43")
+  implementation(group = "com.simiacryptus", name = "jo-penai", version = "1.0.44")
 
   implementation(group = "com.simiacryptus.skyenet", name = "core", version = skyenet_version)
   implementation(group = "com.simiacryptus.skyenet", name = "groovy", version = skyenet_version)

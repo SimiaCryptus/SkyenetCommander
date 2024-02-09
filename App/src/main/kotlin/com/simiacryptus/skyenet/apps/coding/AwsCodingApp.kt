@@ -21,7 +21,7 @@ class AwsCodingApp : ApplicationServer(
     api: API
   ) {
     val settings = getSettings<Settings>(session, user)
-    CodingAgent(
+    ToolAgent(
       api = api,
       dataStorage = dataStorage,
       session = session,
