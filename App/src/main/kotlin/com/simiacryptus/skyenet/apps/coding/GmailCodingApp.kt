@@ -23,7 +23,7 @@ class GmailCodingApp : ApplicationServer(
     ui: ApplicationInterface,
     api: API
   ) {
-    val settings = getSettings<Settings>(session, user) ?: Settings()
+    val settings = getSettings(session, user) ?: Settings()
     val gmailSvc: Gmail = GmailService.getGmailService()
     object : ToolAgent<KotlinInterpreter>(
       api = api,
