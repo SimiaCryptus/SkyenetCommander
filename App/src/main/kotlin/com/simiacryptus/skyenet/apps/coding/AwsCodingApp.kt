@@ -7,6 +7,8 @@ import com.simiacryptus.skyenet.core.platform.User
 import com.simiacryptus.skyenet.kotlin.KotlinInterpreter
 import com.simiacryptus.skyenet.webui.application.ApplicationInterface
 import com.simiacryptus.skyenet.webui.application.ApplicationServer
+import com.simiacryptus.skyenet.webui.application.InterpreterAndTools
+import com.simiacryptus.skyenet.webui.application.ToolAgent
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain
 
 class AwsCodingApp : ApplicationServer(
@@ -21,20 +23,24 @@ class AwsCodingApp : ApplicationServer(
     api: API
   ) {
     val settings = getSettings<Settings>(session, user)
-    ToolAgent(
+    val region = settings?.region
+    val profile = settings?.profile
+    object : ToolAgent<KotlinInterpreter>(
       api = api,
       dataStorage = dataStorage,
       session = session,
       user = user,
       ui = ui,
       interpreter = KotlinInterpreter::class,
-      symbols = mapOf(
-        "awsRegion" to (settings?.region ?: DefaultAwsRegionProviderChain().getRegion().id()),
-        "awsProfile" to (settings?.profile ?: "default"),
-      ),
+      symbols = getSymbols(region, profile),
       temperature = (settings?.temperature ?: 0.1),
       model = (settings?.model ?: ChatModels.GPT35Turbo),
-    ).start(
+    ) {
+      override fun getInterpreterString(): String {
+        return AwsCodingApp::class.java.name + ":${settings?.region}, ${settings?.profile})"
+      }
+
+    }.start(
       userMessage = userMessage,
     )
   }
@@ -49,5 +55,20 @@ class AwsCodingApp : ApplicationServer(
   override val settingsClass: Class<*> get() = Settings::class.java
   @Suppress("UNCHECKED_CAST")
   override fun <T : Any> initSettings(session: Session): T? = Settings() as T
+
+  companion object {
+    fun fromString(str: String): InterpreterAndTools {
+      val parts = str.split(", ")
+      return InterpreterAndTools(
+        KotlinInterpreter::class.java,
+        getSymbols(parts[0], parts[1])
+      )
+    }
+
+    fun getSymbols(region: String?, profile: String?) = mapOf(
+      "awsRegion" to (region ?: DefaultAwsRegionProviderChain().getRegion().id()),
+      "awsProfile" to (profile ?: "default"),
+    )
+  }
 
 }
