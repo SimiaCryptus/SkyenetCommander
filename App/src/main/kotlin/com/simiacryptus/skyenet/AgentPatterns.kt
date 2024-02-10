@@ -85,7 +85,7 @@ object AgentPatterns {
     initialResponse = { actor.answer(toInput(it), api = api) },
     reviseResponse = { userMessage: String, design: T, userResponse: String ->
       val input = toInput(userMessage)
-      actor.answer(
+      actor.respond(
         messages = actor.chatMessages(input) +
             listOf(
               design.toString().toContentList() to ApiModel.Role.assistant,

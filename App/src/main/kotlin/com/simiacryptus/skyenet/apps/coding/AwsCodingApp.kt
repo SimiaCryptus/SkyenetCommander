@@ -7,8 +7,7 @@ import com.simiacryptus.skyenet.core.platform.User
 import com.simiacryptus.skyenet.kotlin.KotlinInterpreter
 import com.simiacryptus.skyenet.webui.application.ApplicationInterface
 import com.simiacryptus.skyenet.webui.application.ApplicationServer
-import com.simiacryptus.skyenet.webui.application.InterpreterAndTools
-import com.simiacryptus.skyenet.webui.application.ToolAgent
+import com.simiacryptus.skyenet.webui.servlet.InterpreterAndTools
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain
 
 class AwsCodingApp : ApplicationServer(

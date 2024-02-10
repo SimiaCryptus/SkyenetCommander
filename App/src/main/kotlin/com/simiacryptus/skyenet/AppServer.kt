@@ -1,18 +1,15 @@
 package com.simiacryptus.skyenet
 
-import com.simiacryptus.skyenet.apps.coding.AwsCodingApp
-import com.simiacryptus.skyenet.apps.coding.BashCodingApp
-import com.simiacryptus.skyenet.apps.coding.GmailCodingApp
-import com.simiacryptus.skyenet.apps.coding.PowershellCodingApp
+import com.simiacryptus.skyenet.apps.coding.*
 import com.simiacryptus.skyenet.core.platform.ApplicationServices
 import com.simiacryptus.skyenet.core.platform.AuthenticationInterface
 import com.simiacryptus.skyenet.core.platform.AuthorizationInterface
 import com.simiacryptus.skyenet.core.platform.User
 import com.simiacryptus.skyenet.core.platform.file.AuthorizationManager
 import com.simiacryptus.skyenet.webui.application.ApplicationDirectory
-import com.simiacryptus.skyenet.webui.application.InterpreterAndTools
-import com.simiacryptus.skyenet.webui.application.ToolServlet
+import com.simiacryptus.skyenet.webui.servlet.InterpreterAndTools
 import com.simiacryptus.skyenet.webui.servlet.OAuthBase
+import com.simiacryptus.skyenet.webui.servlet.ToolServlet
 import org.eclipse.jetty.webapp.WebAppContext
 
 
@@ -40,6 +37,7 @@ open class AppServer(
       ChildWebApp("/gmail", GmailCodingApp()),
       ChildWebApp("/bash", BashCodingApp()),
       ChildWebApp("/powershell", PowershellCodingApp()),
+      ChildWebApp("/webdev", WebDevApp()),
     )
   }
 
