@@ -1,6 +1,7 @@
 package com.simiacryptus.skyenet
 
 import com.simiacryptus.skyenet.apps.coding.*
+import com.simiacryptus.skyenet.apps.general.WebDevApp
 import com.simiacryptus.skyenet.core.platform.ApplicationServices
 import com.simiacryptus.skyenet.core.platform.AuthenticationInterface
 import com.simiacryptus.skyenet.core.platform.AuthorizationInterface
