@@ -63,7 +63,7 @@ object AgentPatterns {
       onAccept.acquire()
       design
     } catch (e: Throwable) {
-      task.error(e)
+      task.error(ui, e)
       throw e
     }
     return design
