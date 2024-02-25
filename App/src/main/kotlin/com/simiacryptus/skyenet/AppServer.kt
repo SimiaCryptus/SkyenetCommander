@@ -21,13 +21,14 @@ open class AppServer(
         AwsCodingApp::class.java -> AwsCodingApp.fromString(if(parts.size > 1) parts[1] else "")
         GmailCodingApp::class.java -> GmailCodingApp.fromString(user, if(parts.size > 1) parts[1] else "")
         JDBCCodingApp::class.java -> JDBCCodingApp.fromString(user, if(parts.size > 1) parts[1] else "")
+        PowershellCodingApp::class.java -> PowershellCodingApp.fromString(user, if(parts.size > 1) parts[1] else "")
+        BashCodingApp::class.java -> BashCodingApp.fromString(user, if(parts.size > 1) parts[1] else "")
         else -> throw IllegalArgumentException(parts[0])
       }
     }
   }
 
-  //    private val sparkConf = SparkConf().setMaster("local[*]").setAppName("Spark Coding Assistant")
-  override val childWebApps by lazy {
+   override val childWebApps by lazy {
     listOf(
       ChildWebApp("/aws", AwsCodingApp()),
       ChildWebApp("/gmail", GmailCodingApp()),
