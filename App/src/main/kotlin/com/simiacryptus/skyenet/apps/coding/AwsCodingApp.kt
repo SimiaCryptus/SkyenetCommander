@@ -8,7 +8,13 @@ import com.simiacryptus.skyenet.kotlin.KotlinInterpreter
 import com.simiacryptus.skyenet.webui.application.ApplicationInterface
 import com.simiacryptus.skyenet.webui.application.ApplicationServer
 import com.simiacryptus.skyenet.webui.servlet.InterpreterAndTools
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider
+import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain
+import software.amazon.awssdk.services.ec2.Ec2Client
+import software.amazon.awssdk.services.emr.EmrClient
+import software.amazon.awssdk.services.s3.S3Client
+import java.util.function.Supplier
 
 class AwsCodingApp : ApplicationServer(
   applicationName = "AWS Coding Assistant v1.0",
@@ -64,10 +70,45 @@ class AwsCodingApp : ApplicationServer(
       )
     }
 
-    fun getSymbols(region: String?, profile: String?) = mapOf(
-      "awsRegion" to (region ?: DefaultAwsRegionProviderChain().getRegion().id()),
-      "awsProfile" to (profile ?: "default"),
-    )
+    fun getSymbols(region: String?, profile: String?): Map<String, Any> {
+      val credentialsProvider = ProfileCredentialsProvider.builder().profileName(profile ?: "default").build()
+      val region = Region.of(region ?: DefaultAwsRegionProviderChain().getRegion().id())
+      return mapOf(
+        "awsRegion" to region,
+        "awsProfile" to (profile ?: "default"),
+        "credentials" to credentialsProvider,
+        "s3" to S3ClientSupplier(credentialsProvider, region),
+        "ec2" to Ec2ClientSupplier(credentialsProvider, region),
+        "emr" to EmrClientSupplier(credentialsProvider, region),
+      )
+    }
+
+    class S3ClientSupplier(
+      private val credentialsProvider: ProfileCredentialsProvider?,
+      private val region: Region?
+    ) : Supplier<S3Client> {
+      override fun get(): S3Client {
+        return S3Client.builder().credentialsProvider(credentialsProvider).region(region).build()
+      }
+    }
+
+    class Ec2ClientSupplier(
+      private val credentialsProvider: ProfileCredentialsProvider?,
+      private val region: Region?
+    ) : Supplier<Ec2Client> {
+      override fun get(): Ec2Client {
+        return Ec2Client.builder().credentialsProvider(credentialsProvider).region(region).build()
+      }
+    }
+
+    class EmrClientSupplier(
+      private val credentialsProvider: ProfileCredentialsProvider?,
+      private val region: Region?
+    ) : Supplier<EmrClient> {
+      override fun get(): EmrClient {
+        return EmrClient.builder().credentialsProvider(credentialsProvider).region(region).build()
+      }
+    }
   }
 
 }
