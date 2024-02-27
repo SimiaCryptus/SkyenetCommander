@@ -43,6 +43,7 @@ class SeleniumCodingApp : ApplicationServer(
       temperature = (settings.temperature ?: 0.1),
       model = settings.model,
     ) {
+
       override fun getInterpreterString(): String = SeleniumCodingApp::class.java.name
       override fun codeRequest(messages: List<Pair<String, ApiModel.Role>>): CodingActor.CodeRequest {
         return CodingActor.CodeRequest(
