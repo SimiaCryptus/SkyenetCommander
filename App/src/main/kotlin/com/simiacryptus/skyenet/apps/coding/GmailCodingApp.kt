@@ -8,6 +8,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.gmail.Gmail
 import com.simiacryptus.jopenai.API
 import com.simiacryptus.jopenai.models.ChatModels
+import com.simiacryptus.jopenai.models.OpenAITextModel
 import com.simiacryptus.skyenet.apps.coding.GmailCodingApp.GmailSupplier.CalendarSupplier
 import com.simiacryptus.skyenet.apps.coding.GmailCodingApp.GmailSupplier.DriveSupplier
 import com.simiacryptus.skyenet.core.platform.Session
@@ -92,7 +93,7 @@ class GmailCodingApp : ApplicationServer(
 
   data class Settings(
     val temperature: Double? = 0.1,
-    val model: ChatModels = ChatModels.GPT4Turbo,
+    val model: OpenAITextModel = ChatModels.GPT4Turbo,
   )
 
   override val settingsClass: Class<*> get() = Settings::class.java
