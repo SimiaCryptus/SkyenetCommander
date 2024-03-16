@@ -50,7 +50,7 @@ class BashCodingApp(
     session: Session,
     user: User?,
     ui: ApplicationInterface,
-    val settings: Settings?,
+    private val settings: Settings?,
     dataStorage: StorageInterface
   ) : ShellToolAgent<ProcessInterpreter>(
     api = api,

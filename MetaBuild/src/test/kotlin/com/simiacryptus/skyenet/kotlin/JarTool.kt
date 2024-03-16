@@ -2,10 +2,7 @@
 
 package com.simiacryptus.skyenet.kotlin
 
-import com.simiacryptus.skyenet.core.util.ClasspathRelationships.analyzeJar
-import com.simiacryptus.skyenet.core.util.ClasspathRelationships.classAccessMap
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.classToPath
-import com.simiacryptus.skyenet.core.util.ClasspathRelationships.downstream
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.downstreamMap
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.readJarClasses
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.readJarFiles
