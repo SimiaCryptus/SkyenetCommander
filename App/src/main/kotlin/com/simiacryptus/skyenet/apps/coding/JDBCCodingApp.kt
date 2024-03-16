@@ -2,7 +2,6 @@ package com.simiacryptus.skyenet.apps.coding
 
 import com.simiacryptus.jopenai.API
 import com.simiacryptus.jopenai.models.ChatModels
-import com.simiacryptus.jopenai.models.OpenAITextModel
 import com.simiacryptus.jopenai.util.JsonUtil
 import com.simiacryptus.skyenet.core.platform.Session
 import com.simiacryptus.skyenet.core.platform.User
@@ -65,7 +64,7 @@ class JDBCCodingApp : ApplicationServer(
 
   data class Settings(
     val temperature: Double? = 0.1,
-    val model: OpenAITextModel = ChatModels.GPT4Turbo,
+    val model: ChatModels = ChatModels.GPT4Turbo,
     val jdbcUrl: String = "jdbc:postgresql://localhost:5432/postgres",
     val jdbcUser: String = "postgres",
     val jdbcPassword: String = "password",

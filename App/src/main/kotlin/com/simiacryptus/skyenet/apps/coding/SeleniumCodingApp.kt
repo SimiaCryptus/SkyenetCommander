@@ -3,7 +3,6 @@ package com.simiacryptus.skyenet.apps.coding
 import com.simiacryptus.jopenai.API
 import com.simiacryptus.jopenai.ApiModel
 import com.simiacryptus.jopenai.models.ChatModels
-import com.simiacryptus.jopenai.models.OpenAITextModel
 import com.simiacryptus.skyenet.core.actors.CodingActor
 import com.simiacryptus.skyenet.core.platform.ApplicationServices
 import com.simiacryptus.skyenet.core.platform.AuthenticationInterface
@@ -59,7 +58,7 @@ class SeleniumCodingApp : ApplicationServer(
 
   data class Settings(
     val temperature: Double? = 0.1,
-    val model: OpenAITextModel = ChatModels.GPT4Turbo,
+    val model: ChatModels = ChatModels.GPT4Turbo,
   )
 
   override val settingsClass: Class<*> get() = Settings::class.java

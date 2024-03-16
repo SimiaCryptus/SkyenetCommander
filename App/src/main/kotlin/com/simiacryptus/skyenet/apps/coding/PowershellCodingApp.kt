@@ -21,7 +21,7 @@ class PowershellCodingApp(
   data class Settings(
     val env: Map<String, String> = mapOf(),
     val workingDir: String = ".",
-    val model: OpenAITextModel = ChatModels.GPT35Turbo,
+    val model: ChatModels = ChatModels.GPT35Turbo,
     val temperature: Double = 0.1,
     val language: String = "powershell",
     val command: List<String> = listOf("powershell"),

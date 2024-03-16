@@ -2,7 +2,6 @@ package com.simiacryptus.skyenet.apps.coding
 
 import com.simiacryptus.jopenai.API
 import com.simiacryptus.jopenai.models.ChatModels
-import com.simiacryptus.jopenai.models.OpenAITextModel
 import com.simiacryptus.skyenet.core.platform.Session
 import com.simiacryptus.skyenet.core.platform.User
 import com.simiacryptus.skyenet.kotlin.KotlinInterpreter
@@ -55,7 +54,7 @@ class AwsCodingApp : ApplicationServer(
     val region: String? = DefaultAwsRegionProviderChain().getRegion().id(),
     val profile: String? = "default",
     val temperature: Double? = 0.1,
-    val model: OpenAITextModel = ChatModels.GPT35Turbo,
+    val model: ChatModels = ChatModels.GPT35Turbo,
   )
 
   override val settingsClass: Class<*> get() = Settings::class.java
