@@ -39,6 +39,7 @@ open class AppServer(
       ChildWebApp("/powershell", PowershellCodingApp()),
       ChildWebApp("/webdev", WebDevApp()),
       ChildWebApp("/jdbc", JDBCCodingApp()),
+      ChildWebApp("/taskDev", TaskRunnerApp()),
     )
   }
 

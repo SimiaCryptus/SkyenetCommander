@@ -26,7 +26,7 @@ kotlin {
   jvmToolchain(17)
 }
 
-val skyenet_version = "1.0.47"
+val skyenet_version = "1.0.49"
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
   testImplementation(group = "com.simiacryptus.skyenet", name = "core", version = skyenet_version)
