@@ -103,8 +103,6 @@ class TaskRunnerAgent(
         Briefly explain your rationale for the task breakdown and ordering.
         
         Tasks can be of the following types: 
-        * TaskPlanning - High-level planning and organization of tasks - identify smaller, actionable tasks based on the information available at task execution time.
-          ** Specify the prior tasks and the goal of the task
         * Inquiry - Answer questions by reading in files and providing a summary that can be discussed with and approved by the user
           ** Specify the questions and the goal of the inquiry
           ** List input files to be examined
@@ -182,7 +180,7 @@ class TaskRunnerAgent(
         + const a = 1;
         ```
 
-        Consider the following task types: TaskPlanning, Requirements, NewFile, EditFile, and Documentation.
+        Consider the following task types: Requirements, NewFile, EditFile, and Documentation.
         Ensure that each identified task fits one of these categories and specify the task type for better integration with the system.
         Continued text
       """.trimIndent(),
@@ -197,7 +195,7 @@ class TaskRunnerAgent(
         Provide a comprehensive overview, including key concepts, relevant technologies, best practices, and any potential challenges or considerations. 
         Ensure the information is accurate, up-to-date, and well-organized to facilitate easy understanding.
 
-        Focus on generating insights and information that support the task types available in the system (TaskPlanning, Requirements, NewFile, EditFile, Documentation).
+        Focus on generating insights and information that support the task types available in the system (Requirements, NewFile, EditFile, Documentation).
         This will ensure that the inquiries are tailored to assist in the planning and execution of tasks within the system's framework.
      """.trimIndent(),
       model = model,
@@ -238,14 +236,14 @@ class TaskRunnerAgent(
   }
 
   enum class TaskType {
-    TaskPlanning,
+    //    TaskPlanning,
     Inquiry,
     NewFile,
     EditFile,
     Documentation,
   }
 
-//  val root = dataStorage.getSessionDir(user, session).toPath()
+  //  val root = dataStorage.getSessionDir(user, session).toPath()
   val codeFiles
     get() = mutableMapOf<String, String>().apply {
       root.toFile().walk().forEach { file ->
@@ -268,7 +266,7 @@ class TaskRunnerAgent(
             |
             |${
         codeFiles.toList().joinToString("\n\n") {
-          val path = root.relativize(it.toNioPath())
+          val path = root.relativize(File(it.first).toPath())
           """
               |## $path
               |
@@ -430,7 +428,7 @@ class TaskRunnerAgent(
       val codeFiles = codeFiles
       val inputFileCode = subTask.input_files?.joinToString("\n\n\n") {
         try {
-        """
+          """
         |# $it
         |
         |```
@@ -525,19 +523,6 @@ class TaskRunnerAgent(
 
         TaskType.Inquiry -> {
           inquiry(
-            subTask,
-            userMessage,
-            highLevelPlan,
-            priorCode,
-            inputFileCode,
-            genState,
-            taskId,
-            task
-          )
-        }
-
-        TaskType.TaskPlanning -> {
-          taskPlanning(
             subTask = subTask,
             userMessage = userMessage,
             highLevelPlan = highLevelPlan,
@@ -549,6 +534,20 @@ class TaskRunnerAgent(
             taskTabs = taskTabs,
           )
         }
+
+//        TaskType.TaskPlanning -> {
+//          taskPlanning(
+//            subTask = subTask,
+//            userMessage = userMessage,
+//            highLevelPlan = highLevelPlan,
+//            priorCode = priorCode,
+//            inputFileCode = inputFileCode,
+//            genState = genState,
+//            taskId = taskId,
+//            task = task,
+//            taskTabs = taskTabs,
+//          )
+//        }
 
         else -> null
       }
@@ -634,33 +633,33 @@ class TaskRunnerAgent(
       )
       genState.taskResult[taskId] = codeResult
       renderMarkdown(
-      ui.socketManager.addApplyDiffLinks2(
-        root = root,
+        ui.socketManager.addApplyDiffLinks2(
+          root = root,
           ui = ui,
-        code = codeFiles,
-        response = codeResult,
-        handle = { newCodeMap ->
+          code = codeFiles,
+          response = codeResult,
+          handle = { newCodeMap ->
             val codeFiles = codeFiles
-          newCodeMap.forEach { (path, newCode) ->
-            val prev = codeFiles[path]
-            if (prev != newCode) {
+            newCodeMap.forEach { (path, newCode) ->
+              val prev = codeFiles[path]
+              if (prev != newCode) {
 //            codeFiles[path] = newCode
-              task.complete(
-                "<a href='${
-                  task.saveFile(
-                    path,
-                    newCode.toByteArray(Charsets.UTF_8)
-                  )
-                }'>$path</a> Updated"
-              )
+                task.complete(
+                  "<a href='${
+                    task.saveFile(
+                      path,
+                      newCode.toByteArray(Charsets.UTF_8)
+                    )
+                  }'>$path</a> Updated"
+                )
+              }
             }
-          }
           }, task = task
-      ) + accept(sb) {
+        ) + accept(sb) {
           taskTabs.selectedTab += 1
           taskTabs.update()
-        task.complete()
-        onComplete()
+          task.complete()
+          onComplete()
         })
     }
     object : Retryable(ui, task, process) {
