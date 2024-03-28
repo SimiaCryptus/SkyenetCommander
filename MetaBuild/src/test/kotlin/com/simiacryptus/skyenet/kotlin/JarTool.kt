@@ -2,14 +2,20 @@
 
 package com.simiacryptus.skyenet.kotlin
 
+import com.simiacryptus.skyenet.core.util.ClasspathRelationships.analyzeJar
+import com.simiacryptus.skyenet.core.util.ClasspathRelationships.classAccessMap
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.classToPath
+import com.simiacryptus.skyenet.core.util.ClasspathRelationships.downstream
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.downstreamMap
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.readJarClasses
 import com.simiacryptus.skyenet.core.util.ClasspathRelationships.readJarFiles
 import com.simiacryptus.skyenet.core.util.RuleTreeBuilder.getRuleExpression
 import org.objectweb.asm.Opcodes
 import java.io.File
+import java.math.BigInteger
 import java.util.*
+
+val BigInteger.nonZero: Boolean get() = !this.equals(BigInteger.ZERO)
 
 object JarTool {
   val buildFile = File("""C:\Users\andre\code\SkyenetApps\App\build.gradle.kts""")

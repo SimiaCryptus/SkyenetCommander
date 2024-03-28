@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicReference
 class TaskRunnerApp(
   applicationName: String = "Task Planning v1.0",
   path: String = "/taskDev",
-  override val root: File,
+//  override val root: File = File(".skyenet/taskDev")
 ) : ApplicationServer(
   applicationName = applicationName,
   path = path,
@@ -72,7 +72,7 @@ class TaskRunnerApp(
         model = settings?.model ?: ChatModels.GPT4Turbo,
         parsingModel = settings?.parsingModel ?: ChatModels.GPT4Turbo,
         temperature = settings?.temperature ?: 0.3,
-        root = root.toPath(),
+//        root = root.toPath(),
       ).startProcess(userMessage = userMessage)
     } catch (e: Throwable) {
       log.warn("Error", e)
@@ -202,7 +202,7 @@ class TaskRunnerAgent(
       temperature = temperature,
     ),
   ),
-  val root: Path
+  val root: Path = dataStorage.getSessionDir(user, session).toPath()
 ) : ActorSystem<TaskRunnerAgent.ActorTypes>(
   actorMap.map { it.key.name to it.value }.toMap(),
   dataStorage,
@@ -329,7 +329,6 @@ class TaskRunnerAgent(
                 log.warn("Task tab not found: $taskId")
               }
               val isChecked = if (taskId in genState.taskIdProcessingQueue) "checked" else ""
-              log.debug("Task: '${subTask?.state}' ${System.identityHashCode(subTask)} '${taskId}'  ")
               val style = when (subTask?.state) {
                 TaskState.Completed -> " style='text-decoration: line-through;'"
                 null -> " style='opacity: 20%;'"
@@ -436,7 +435,7 @@ class TaskRunnerAgent(
         |```
         """.trimMargin()
         } catch (e: Throwable) {
-          log.warn("Error", e)
+          log.warn("Error: root=$root    ", e)
           ""
         }
       } ?: ""

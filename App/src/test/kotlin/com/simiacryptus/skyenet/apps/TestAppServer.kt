@@ -6,6 +6,8 @@ import com.simiacryptus.skyenet.core.platform.AuthenticationInterface
 import com.simiacryptus.skyenet.core.platform.AuthorizationInterface
 import com.simiacryptus.skyenet.core.platform.User
 import com.simiacryptus.skyenet.core.platform.file.AuthorizationManager
+import com.simiacryptus.skyenet.webui.servlet.OAuthBase
+import org.eclipse.jetty.webapp.WebAppContext
 
 object TestAppServer : AppServer(
   publicName = "localhost",
@@ -25,6 +27,7 @@ object TestAppServer : AppServer(
       "Test User",
       ""
     )
+
     ApplicationServices.authenticationManager = object : AuthenticationInterface {
       override fun getUser(accessToken: String?) = mockUser
       override fun putUser(accessToken: String, user: User) = throw UnsupportedOperationException()
@@ -36,6 +39,13 @@ object TestAppServer : AppServer(
         user: User?,
         operationType: AuthorizationInterface.OperationType
       ): Boolean = true
+    }
+  }
+
+  override fun authenticatedWebsite() = object : OAuthBase("http://localhost:37600/oauth2callback") {
+    override fun configure(context: WebAppContext, addFilter: Boolean): WebAppContext {
+      // do nothing
+      return context
     }
   }
 
